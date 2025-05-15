@@ -1,6 +1,6 @@
 {
   "name": "ai-integrations",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "packageManager": "pnpm@10.11.0",
   "description": "Ai integrations for every LLM",
   "type": "module",
