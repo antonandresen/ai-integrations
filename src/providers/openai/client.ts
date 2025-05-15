@@ -1,6 +1,3 @@
-/// <reference types="axios" />
-/// <reference types="eventsource-parser" />
-
 import axios from 'axios'
 import {
   createParser,
