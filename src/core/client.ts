@@ -1,4 +1,3 @@
-import process from 'node:process'
 import { getUserAgent } from '../version'
 import { AIIntegrationsError, AuthenticationError } from './errors'
 import type { BaseClientConfig, ModelProvider, RequestOptions } from './types'
