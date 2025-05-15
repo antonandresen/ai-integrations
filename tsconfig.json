@@ -7,14 +7,15 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "types": ["node"],
+    "typeRoots": ["./node_modules/@types", "./src/types"],
     "strict": true,
     "noUnusedLocals": true,
     "declaration": true,
-    "isolatedDeclarations": true,
+    "isolatedDeclarations": false,
     "esModuleInterop": true,
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
     "skipLibCheck": true
   },
-  "include": ["src", "tests"]
+  "include": ["src", "tests", "examples"]
 }

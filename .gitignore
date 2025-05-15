@@ -1,6 +1,8 @@
-node_modules
-dist
-
-*.log
+node_modules/
+dist/
+.env
 .DS_Store
+coverage/
+.vscode/
+*.log
 .eslintcache
