@@ -2,7 +2,11 @@
 /// <reference types="eventsource-parser" />
 
 import axios from 'axios'
-import { createParser, type ParsedEvent, type ReconnectInterval } from 'eventsource-parser'
+import {
+  createParser,
+  type ParsedEvent,
+  type ReconnectInterval,
+} from 'eventsource-parser'
 import { BaseClient } from '../../core/client'
 import { debug } from '../../core/config'
 import { UnsupportedCapabilityError } from '../../core/errors'
@@ -34,6 +38,8 @@ import type {
   TextGenerationResponse,
 } from '../../features/text'
 import type {
+  Assistant,
+  AssistantCreateOptions,
   Thread,
   ThreadCreateOptions,
   ThreadFeature,
@@ -41,8 +47,6 @@ import type {
   ThreadMessageCreateOptions,
   ThreadRun,
   ThreadRunOptions,
-  Assistant,
-  AssistantCreateOptions,
 } from '../../features/thread'
 import { getBestModelForCapability, modelSupportsCapability } from './models'
 import type { OpenAIClientConfig } from './types'
@@ -171,7 +175,7 @@ export class OpenAIClient
       const organization = getConfigValue<OpenAIClientConfig, 'organization'>(
         this.config,
         'organization',
-        undefined
+        undefined,
       )
 
       if (organization) {
@@ -299,10 +303,14 @@ export class OpenAIClient
       )
 
       const responseData = response.data
-      debug(`OpenAI embedding response: ${JSON.stringify({
-        ...responseData,
-        data: responseData?.data ? `[${responseData.data.length} embeddings]` : undefined,
-      })}`)
+      debug(
+        `OpenAI embedding response: ${JSON.stringify({
+          ...responseData,
+          data: responseData?.data
+            ? `[${responseData.data.length} embeddings]`
+            : undefined,
+        })}`,
+      )
 
       // Format the response
       return {
@@ -335,7 +343,7 @@ export class OpenAIClient
     options: CodeGenerationOptions,
   ): Promise<CodeGenerationResponse> {
     // Implement code generation using chat completion with system prompt
-    const systemPrompt = `You are an expert programmer. Generate only code in ${options.language || 'the appropriate language'} without explanation.${options.context ? ' Consider the following context: ' + options.context : ''}`;
+    const systemPrompt = `You are an expert programmer. Generate only code in ${options.language || 'the appropriate language'} without explanation.${options.context ? ` Consider the following context: ${options.context}` : ''}`
 
     try {
       const chatResponse = await this.createChatCompletion({
@@ -348,7 +356,7 @@ export class OpenAIClient
         maxTokens: options.maxTokens,
         topP: options.topP,
         stop: options.stop,
-      });
+      })
 
       return {
         code: chatResponse.message.content,
@@ -356,9 +364,9 @@ export class OpenAIClient
         model: chatResponse.model,
         usage: chatResponse.usage,
         raw: chatResponse.raw,
-      };
+      }
     } catch (error) {
-      return this.handleError(error);
+      return this.handleError(error)
     }
   }
 
@@ -397,7 +405,7 @@ export class OpenAIClient
     const organization = getConfigValue<OpenAIClientConfig, 'organization'>(
       this.config,
       'organization',
-      undefined
+      undefined,
     )
 
     if (organization) {
@@ -434,7 +442,9 @@ export class OpenAIClient
       }
     }
 
-    debug(`OpenAI chat completion stream request: ${JSON.stringify(requestBody)}`)
+    debug(
+      `OpenAI chat completion stream request: ${JSON.stringify(requestBody)}`,
+    )
 
     try {
       const response = await axios.post(
@@ -449,7 +459,7 @@ export class OpenAIClient
       )
 
       // Create a message content accumulator
-      let accumulatedMessage: ChatMessage = {
+      const accumulatedMessage: ChatMessage = {
         role: 'assistant',
         content: '',
       }
@@ -475,17 +485,19 @@ export class OpenAIClient
 
             // Handle function calls or tool calls
             if (delta?.function_call) {
-              accumulatedMessage.functionCall = accumulatedMessage.functionCall || {
-                name: '',
-                arguments: ''
-              }
+              accumulatedMessage.functionCall =
+                accumulatedMessage.functionCall || {
+                  name: '',
+                  arguments: '',
+                }
 
               if (delta.function_call.name) {
                 accumulatedMessage.functionCall.name += delta.function_call.name
               }
 
               if (delta.function_call.arguments) {
-                accumulatedMessage.functionCall.arguments += delta.function_call.arguments
+                accumulatedMessage.functionCall.arguments +=
+                  delta.function_call.arguments
               }
             }
 
@@ -497,10 +509,12 @@ export class OpenAIClient
                   accumulatedMessage.toolCalls![index] = {
                     id: toolCall.id || '',
                     type: toolCall.type || '',
-                    function: toolCall.function ? {
-                      name: toolCall.function.name || '',
-                      arguments: toolCall.function.arguments || '',
-                    } : undefined,
+                    function: toolCall.function
+                      ? {
+                        name: toolCall.function.name || '',
+                        arguments: toolCall.function.arguments || '',
+                      }
+                      : undefined,
                   }
                 } else {
                   if (toolCall.id) {
@@ -510,15 +524,19 @@ export class OpenAIClient
                     accumulatedMessage.toolCalls![index].type = toolCall.type
                   }
                   if (toolCall.function) {
-                    accumulatedMessage.toolCalls![index].function = accumulatedMessage.toolCalls![index].function || {
-                      name: '',
-                      arguments: '',
-                    }
+                    accumulatedMessage.toolCalls![index].function =
+                      accumulatedMessage.toolCalls![index].function || {
+                        name: '',
+                        arguments: '',
+                      }
                     if (toolCall.function.name) {
-                      accumulatedMessage.toolCalls![index].function!.name += toolCall.function.name
+                      accumulatedMessage.toolCalls![index].function!.name +=
+                        toolCall.function.name
                     }
                     if (toolCall.function.arguments) {
-                      accumulatedMessage.toolCalls![index].function!.arguments += toolCall.function.arguments
+                      accumulatedMessage.toolCalls![
+                        index
+                      ].function!.arguments += toolCall.function.arguments
                     }
                   }
                 }
@@ -571,7 +589,7 @@ export class OpenAIClient
       const organization = getConfigValue<OpenAIClientConfig, 'organization'>(
         this.config,
         'organization',
-        undefined
+        undefined,
       )
 
       if (organization) {
@@ -584,7 +602,7 @@ export class OpenAIClient
 
       // Add messages if provided
       if (options.messages?.length) {
-        requestBody.messages = options.messages.map(message => ({
+        requestBody.messages = options.messages.map((message) => ({
           role: message.role,
           content: message.content,
           file_ids: message.fileIds || [],
@@ -638,7 +656,7 @@ export class OpenAIClient
       const organization = getConfigValue<OpenAIClientConfig, 'organization'>(
         this.config,
         'organization',
-        undefined
+        undefined,
       )
 
       if (organization) {
@@ -646,13 +664,10 @@ export class OpenAIClient
       }
 
       // Make API call to OpenAI
-      const response = await axios.get(
-        this.getBaseUrl(`threads/${threadId}`),
-        {
-          headers,
-          timeout: this.config.timeout,
-        }
-      )
+      const response = await axios.get(this.getBaseUrl(`threads/${threadId}`), {
+        headers,
+        timeout: this.config.timeout,
+      })
 
       const responseData = response.data
       debug(`OpenAI get thread response: ${JSON.stringify(responseData)}`)
@@ -671,7 +686,9 @@ export class OpenAIClient
   /**
    * Add a message to a thread
    */
-  async createThreadMessage(options: ThreadMessageCreateOptions): Promise<ThreadMessage> {
+  async createThreadMessage(
+    options: ThreadMessageCreateOptions,
+  ): Promise<ThreadMessage> {
     // Ensure API key is present
     this.validateApiKey()
 
@@ -687,7 +704,7 @@ export class OpenAIClient
       const organization = getConfigValue<OpenAIClientConfig, 'organization'>(
         this.config,
         'organization',
-        undefined
+        undefined,
       )
 
       if (organization) {
@@ -701,7 +718,9 @@ export class OpenAIClient
         metadata: options.metadata || {},
       }
 
-      debug(`OpenAI create thread message request: ${JSON.stringify(requestBody)}`)
+      debug(
+        `OpenAI create thread message request: ${JSON.stringify(requestBody)}`,
+      )
 
       // Make API call to OpenAI
       const response = await axios.post(
@@ -715,7 +734,9 @@ export class OpenAIClient
       )
 
       const responseData = response.data
-      debug(`OpenAI create thread message response: ${JSON.stringify(responseData)}`)
+      debug(
+        `OpenAI create thread message response: ${JSON.stringify(responseData)}`,
+      )
 
       return {
         role: responseData.role,
@@ -747,7 +768,7 @@ export class OpenAIClient
       const organization = getConfigValue<OpenAIClientConfig, 'organization'>(
         this.config,
         'organization',
-        undefined
+        undefined,
       )
 
       if (organization) {
@@ -760,11 +781,13 @@ export class OpenAIClient
         {
           headers,
           timeout: this.config.timeout,
-        }
+        },
       )
 
       const responseData = response.data
-      debug(`OpenAI list thread messages response: ${JSON.stringify(responseData)}`)
+      debug(
+        `OpenAI list thread messages response: ${JSON.stringify(responseData)}`,
+      )
 
       return responseData.data.map((message: any) => ({
         role: message.role,
@@ -796,7 +819,7 @@ export class OpenAIClient
       const organization = getConfigValue<OpenAIClientConfig, 'organization'>(
         this.config,
         'organization',
-        undefined
+        undefined,
       )
 
       if (organization) {
@@ -872,7 +895,7 @@ export class OpenAIClient
       const organization = getConfigValue<OpenAIClientConfig, 'organization'>(
         this.config,
         'organization',
-        undefined
+        undefined,
       )
 
       if (organization) {
@@ -885,7 +908,7 @@ export class OpenAIClient
         {
           headers,
           timeout: this.config.timeout,
-        }
+        },
       )
 
       const responseData = response.data
@@ -913,7 +936,7 @@ export class OpenAIClient
   async waitForThreadRun(
     threadId: string,
     runId: string,
-    options: { pollInterval?: number; timeout?: number } = {}
+    options: { pollInterval?: number; timeout?: number } = {},
   ): Promise<ThreadRun> {
     const pollInterval = options.pollInterval || 1000
     const timeout = options.timeout || 60000
@@ -926,7 +949,7 @@ export class OpenAIClient
       Date.now() - startTime < timeout
     ) {
       // Wait for the specified interval
-      await new Promise(resolve => setTimeout(resolve, pollInterval))
+      await new Promise((resolve) => setTimeout(resolve, pollInterval))
 
       // Check the run status again
       run = await this.getThreadRun(threadId, runId)
@@ -958,7 +981,7 @@ export class OpenAIClient
       const organization = getConfigValue<OpenAIClientConfig, 'organization'>(
         this.config,
         'organization',
-        undefined
+        undefined,
       )
 
       if (organization) {
@@ -1027,7 +1050,7 @@ export class OpenAIClient
       const organization = getConfigValue<OpenAIClientConfig, 'organization'>(
         this.config,
         'organization',
-        undefined
+        undefined,
       )
 
       if (organization) {
@@ -1040,7 +1063,7 @@ export class OpenAIClient
         {
           headers,
           timeout: this.config.timeout,
-        }
+        },
       )
 
       const responseData = response.data
@@ -1082,7 +1105,7 @@ export class OpenAIClient
       const organization = getConfigValue<OpenAIClientConfig, 'organization'>(
         this.config,
         'organization',
-        undefined
+        undefined,
       )
 
       if (organization) {
@@ -1095,7 +1118,7 @@ export class OpenAIClient
         {
           headers,
           timeout: this.config.timeout,
-        }
+        },
       )
 
       const responseData = response.data

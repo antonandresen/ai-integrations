@@ -1,7 +1,6 @@
-// Example of using the OpenAI threads feature
-import { createOpenAIClient, configure } from '../src'
-import type { Thread, ThreadMessage, ThreadRun } from '../src/features/thread'
 import dotenv from 'dotenv'
+// Example of using the OpenAI threads feature
+import { configure, createOpenAIClient } from '../src'
 
 // Load environment variables from .env file
 dotenv.config()
@@ -42,11 +41,10 @@ async function main() {
 
     // Wait for the run to complete
     console.log('Waiting for the run to complete...')
-    const completedRun = await client.waitForThreadRun(
-      thread.id,
-      run.id,
-      { pollInterval: 1000, timeout: 60000 }
-    )
+    const completedRun = await client.waitForThreadRun(thread.id, run.id, {
+      pollInterval: 1000,
+      timeout: 60000,
+    })
 
     console.log(`Run completed with status: ${completedRun.status}`)
 
@@ -59,10 +57,9 @@ async function main() {
       console.log(`\n${message.role.toUpperCase()}:`)
       console.log(message.content)
     })
-
   } catch (error) {
     console.error('Error:', error)
   }
 }
 
-main() 
+main()

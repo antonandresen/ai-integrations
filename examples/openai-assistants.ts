@@ -1,7 +1,6 @@
-// Example of creating and using OpenAI assistants
-import { createOpenAIClient, configure } from '../src'
-import type { Assistant } from '../src/features/thread'
 import dotenv from 'dotenv'
+// Example of creating and using OpenAI assistants
+import { configure, createOpenAIClient } from '../src'
 
 // Load environment variables from .env file
 dotenv.config()
@@ -22,7 +21,8 @@ async function main() {
       model: 'gpt-4-turbo',
       name: 'Math Tutor',
       description: 'A helpful assistant that can answer math questions',
-      instructions: 'You are a professional math tutor. Your role is to help users understand mathematical concepts clearly and solve problems step-by-step. Always provide explanations that are easy to follow.',
+      instructions:
+        'You are a professional math tutor. Your role is to help users understand mathematical concepts clearly and solve problems step-by-step. Always provide explanations that are easy to follow.',
     })
 
     console.log(`Assistant created:`)
@@ -40,7 +40,8 @@ async function main() {
     await client.createThreadMessage({
       threadId: thread.id,
       role: 'user',
-      content: 'Can you explain how to solve a quadratic equation and provide an example?',
+      content:
+        'Can you explain how to solve a quadratic equation and provide an example?',
     })
 
     // Run the thread with our assistant
@@ -54,16 +55,15 @@ async function main() {
     console.log('Waiting for the assistant to respond...')
 
     // Wait for the run to complete
-    const completedRun = await client.waitForThreadRun(
-      thread.id,
-      run.id,
-      { pollInterval: 1000, timeout: 60000 }
-    )
+    const completedRun = await client.waitForThreadRun(thread.id, run.id, {
+      pollInterval: 1000,
+      timeout: 60000,
+    })
 
     console.log(`Run completed with status: ${completedRun.status}`)
 
     // Get the assistant's response
-    console.log('\nRetrieving the assistant\'s response...')
+    console.log("\nRetrieving the assistant's response...")
     const messages = await client.listThreadMessages(thread.id)
 
     console.log('\nConversation:')
@@ -78,12 +78,13 @@ async function main() {
 
     console.log(`Found ${assistants.length} assistants:`)
     assistants.forEach((assistant, index) => {
-      console.log(`${index + 1}. ${assistant.name || 'Unnamed'} (${assistant.id})`)
+      console.log(
+        `${index + 1}. ${assistant.name || 'Unnamed'} (${assistant.id})`,
+      )
     })
-
   } catch (error) {
     console.error('Error:', error)
   }
 }
 
-main() 
+main()

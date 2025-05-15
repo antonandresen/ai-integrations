@@ -1,6 +1,6 @@
-// Example of using the OpenAI client to generate embeddings
-import { createOpenAIClient, configure } from '../src'
 import dotenv from 'dotenv'
+// Example of using the OpenAI client to generate embeddings
+import { configure, createOpenAIClient } from '../src'
 
 // Load environment variables from .env file
 dotenv.config()
@@ -27,7 +27,9 @@ async function main() {
     console.log('================')
     console.log(`Model: ${singleEmbedding.model}`)
     console.log(`Dimensions: ${singleEmbedding.data[0].embedding.length}`)
-    console.log(`First 5 values: ${singleEmbedding.data[0].embedding.slice(0, 5)}`)
+    console.log(
+      `First 5 values: ${singleEmbedding.data[0].embedding.slice(0, 5)}`,
+    )
 
     if (singleEmbedding.usage) {
       console.log(`Tokens: ${singleEmbedding.usage.totalTokens}`)
@@ -53,7 +55,9 @@ async function main() {
       console.log(`\nEmbedding #${i + 1}:`)
       console.log(`- Text: ${embedding.text}`)
       console.log(`- Dimensions: ${embedding.embedding.length}`)
-      console.log(`- First 3 values: ${embedding.embedding.slice(0, 3).join(', ')}`)
+      console.log(
+        `- First 3 values: ${embedding.embedding.slice(0, 3).join(', ')}`,
+      )
     }
 
     if (batchEmbedding.usage) {
@@ -67,7 +71,9 @@ async function main() {
     // Simple cosine similarity calculation
     const similarity = calculateCosineSimilarity(vector1, vector2)
     console.log('\nSimilarity between first two texts:')
-    console.log(`${similarity.toFixed(4)} (${similarity < 0.5 ? 'Not similar' : 'Similar'})`)
+    console.log(
+      `${similarity.toFixed(4)} (${similarity < 0.5 ? 'Not similar' : 'Similar'})`,
+    )
   } catch (error) {
     console.error('Error:', error)
   }
@@ -83,13 +89,13 @@ function calculateCosineSimilarity(a: number[], b: number[]): number {
   let normA = 0
   let normB = 0
 
-  for (let i = 0; i < a.length; i++) {
-    dotProduct += a[i] * b[i]
-    normA += a[i] * a[i]
+  for (const [i, element] of a.entries()) {
+    dotProduct += element * b[i]
+    normA += element * element
     normB += b[i] * b[i]
   }
 
   return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB))
 }
 
-main() 
+main()

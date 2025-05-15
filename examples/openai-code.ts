@@ -1,6 +1,6 @@
-// Example of using the OpenAI client to generate code
-import { createOpenAIClient, configure } from '../src'
 import dotenv from 'dotenv'
+// Example of using the OpenAI client to generate code
+import { configure, createOpenAIClient } from '../src'
 
 // Load environment variables from .env file
 dotenv.config()
@@ -19,7 +19,8 @@ async function main() {
 
     // Generate a React component
     const reactResponse = await client.generateCode({
-      prompt: 'Create a React component that displays a counter with increment and decrement buttons, using React hooks',
+      prompt:
+        'Create a React component that displays a counter with increment and decrement buttons, using React hooks',
       language: 'typescript',
       model: 'gpt-4', // Using GPT-4 for better code quality
       temperature: 0.3, // Lower temperature for more deterministic output
@@ -59,10 +60,9 @@ class Graph:
     console.log('\nPython Algorithm:')
     console.log('================')
     console.log(algoResponse.code)
-
   } catch (error) {
     console.error('Error:', error)
   }
 }
 
-main() 
+main()

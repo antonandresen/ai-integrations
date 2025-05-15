@@ -1,5 +1,4 @@
 import type { BaseRequestOptions } from '../core/types'
-import type { ChatMessage } from './chat'
 
 /**
  * Thread creation options
@@ -253,7 +252,13 @@ export interface ThreadRun {
   /**
    * The status of the run
    */
-  status: 'queued' | 'in_progress' | 'completed' | 'failed' | 'cancelled' | 'expired'
+  status:
+    | 'queued'
+    | 'in_progress'
+    | 'completed'
+    | 'failed'
+    | 'cancelled'
+    | 'expired'
 
   /**
    * The creation timestamp
@@ -293,7 +298,9 @@ export interface ThreadFeature {
   /**
    * Add a message to a thread
    */
-  createThreadMessage: (options: ThreadMessageCreateOptions) => Promise<ThreadMessage>
+  createThreadMessage: (
+    options: ThreadMessageCreateOptions,
+  ) => Promise<ThreadMessage>
 
   /**
    * List messages in a thread
@@ -331,6 +338,6 @@ export interface ThreadFeature {
   waitForThreadRun: (
     threadId: string,
     runId: string,
-    options?: { pollInterval?: number; timeout?: number }
+    options?: { pollInterval?: number; timeout?: number },
   ) => Promise<ThreadRun>
-} 
+}

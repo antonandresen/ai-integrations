@@ -1,7 +1,7 @@
-// Example of using the OpenAI client with streaming responses
-import { createOpenAIClient, configure } from '../src'
-import { ChatMessage, MessageRole } from '../src/features/chat'
 import dotenv from 'dotenv'
+// Example of using the OpenAI client with streaming responses
+import { configure, createOpenAIClient } from '../src'
+import type { ChatMessage, MessageRole } from '../src/features/chat'
 
 // Load environment variables from .env file
 dotenv.config()
@@ -22,11 +22,13 @@ async function main() {
     const messages: ChatMessage[] = [
       {
         role: 'system' as MessageRole,
-        content: 'You are a helpful assistant that provides detailed explanations. Break your answers into clear paragraphs.'
+        content:
+          'You are a helpful assistant that provides detailed explanations. Break your answers into clear paragraphs.',
       },
       {
         role: 'user' as MessageRole,
-        content: 'Write a short story about a robot discovering human emotions for the first time.'
+        content:
+          'Write a short story about a robot discovering human emotions for the first time.',
       },
     ]
 
@@ -45,7 +47,7 @@ async function main() {
     let lastContent = ''
     for await (const chunk of stream) {
       // Extract only the new content
-      const newContent = chunk.message.content.substring(lastContent.length)
+      const newContent = chunk.message.content.slice(lastContent.length)
 
       // Print the new content (without a newline to allow continuous output)
       process.stdout.write(newContent)
@@ -60,4 +62,4 @@ async function main() {
   }
 }
 
-main() 
+main()

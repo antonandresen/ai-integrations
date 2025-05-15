@@ -12,4 +12,4 @@ export const VERSION = '0.0.1'
  */
 export function getUserAgent(): string {
   return `ai-integrations/${VERSION} Node.js/${process.versions.node}`
-} 
+}

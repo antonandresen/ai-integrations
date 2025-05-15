@@ -28,4 +28,4 @@ declare module 'eventsource-parser' {
     feed: (chunk: string) => void
     reset: () => void
   }
-} 
+}

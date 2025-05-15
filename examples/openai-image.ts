@@ -1,6 +1,6 @@
-// Example of using the OpenAI client to generate images
-import { createOpenAIClient, configure } from '../src'
 import dotenv from 'dotenv'
+// Example of using the OpenAI client to generate images
+import { configure, createOpenAIClient } from '../src'
 
 // Load environment variables from .env file
 dotenv.config()
@@ -19,7 +19,8 @@ async function main() {
 
     // Generate an image
     const response = await client.generateImage({
-      prompt: 'A futuristic city with flying cars and robots, photorealistic style',
+      prompt:
+        'A futuristic city with flying cars and robots, photorealistic style',
       n: 1,
       size: '1024x1024',
       model: 'dall-e-3',
@@ -62,4 +63,4 @@ async function main() {
   }
 }
 
-main() 
+main()

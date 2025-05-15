@@ -1,7 +1,7 @@
 import process from 'node:process'
+import { getUserAgent } from '../version'
 import { AIIntegrationsError, AuthenticationError } from './errors'
 import type { BaseClientConfig, ModelProvider, RequestOptions } from './types'
-import { getUserAgent } from '../version'
 
 /**
  * Base client for all AI integrations
@@ -32,7 +32,7 @@ export abstract class BaseClient {
   protected getApiKeyFromEnv(): string | undefined {
     // Check provider-specific env variable first (e.g., OPENAI_API_KEY)
     const providerKey =
-      process.env[`${this.provider.toUpperCase().replace(/-/g, '_')}_API_KEY`]
+      process.env[`${this.provider.toUpperCase().replaceAll('-', '_')}_API_KEY`]
     if (providerKey) return providerKey
 
     // Fallback to generic AI_INTEGRATIONS_API_KEY

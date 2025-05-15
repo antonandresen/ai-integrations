@@ -108,9 +108,9 @@ export interface ChatCompletionOptions extends BaseRequestOptions {
    * Controls tool usage behavior
    */
   toolChoice?:
-  | 'auto'
-  | 'none'
-  | { type: 'function'; function: { name: string } }
+    | 'auto'
+    | 'none'
+    | { type: 'function'; function: { name: string } }
 
   /**
    * Number of chat completion choices to generate

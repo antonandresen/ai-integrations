@@ -87,9 +87,9 @@ export interface OpenAIChatCompletionRequest {
     }
   }[]
   tool_choice?:
-  | 'auto'
-  | 'none'
-  | { type: 'function'; function: { name: string } }
+    | 'auto'
+    | 'none'
+    | { type: 'function'; function: { name: string } }
   temperature?: number
   top_p?: number
   n?: number

@@ -1,7 +1,6 @@
-// Example of using the OpenAI client with an organization ID
-import { createOpenAIClient, configure } from '../src'
-import type { ChatMessage } from '../src/features/chat'
 import dotenv from 'dotenv'
+// Example of using the OpenAI client with an organization ID
+import { configure, createOpenAIClient } from '../src'
 
 // Load environment variables from .env file
 dotenv.config()
@@ -45,4 +44,4 @@ async function main() {
   }
 }
 
-main() 
+main()

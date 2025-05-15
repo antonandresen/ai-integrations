@@ -1,7 +1,7 @@
-// Example of using the OpenAI client for chat completions
-import { createOpenAIClient, configure } from '../src'
-import { ChatMessage, MessageRole } from '../src/features/chat'
 import dotenv from 'dotenv'
+// Example of using the OpenAI client for chat completions
+import { configure, createOpenAIClient } from '../src'
+import type { ChatMessage, MessageRole } from '../src/features/chat'
 
 // Load environment variables from .env file
 dotenv.config()
@@ -21,8 +21,16 @@ async function main() {
 
     // Example conversation
     const messages: ChatMessage[] = [
-      { role: 'system' as MessageRole, content: 'You are a helpful assistant that specializes in explaining complex concepts simply.' },
-      { role: 'user' as MessageRole, content: 'Can you explain quantum computing to me like I\'m 10 years old?' },
+      {
+        role: 'system' as MessageRole,
+        content:
+          'You are a helpful assistant that specializes in explaining complex concepts simply.',
+      },
+      {
+        role: 'user' as MessageRole,
+        content:
+          "Can you explain quantum computing to me like I'm 10 years old?",
+      },
     ]
 
     // Send the chat completion request
@@ -46,8 +54,11 @@ async function main() {
     }
 
     // Continue the conversation
-    messages.push(response.message)
-    messages.push({ role: 'user' as MessageRole, content: 'Thanks! Can you give me a simple example of how it might be used?' })
+    messages.push(response.message, {
+      role: 'user' as MessageRole,
+      content:
+        'Thanks! Can you give me a simple example of how it might be used?',
+    })
 
     // Send another chat completion request
     const followUpResponse = await client.createChatCompletion({
@@ -60,10 +71,9 @@ async function main() {
     console.log('\nFollow-up Response:')
     console.log('==================')
     console.log(followUpResponse.message.content)
-
   } catch (error) {
     console.error('Error:', error)
   }
 }
 
-main() 
+main()
